@@ -1,0 +1,27 @@
+<%= simple_form_for(@member, wrapper: :vertical_form) do |f| %>
+  <% if @member.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@member.errors.count, "error") %> prohibited this member from being saved:</h2>
+      <ul>
+        <% @member.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="row">
+    <div class="col-sm-12">
+      <%= f.input :first_name, input_html: {class: "form-control"} %>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12">
+      <%= f.input :last_name, input_html: {class: "form-control"} %>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-6">
+      <button type="submit" class="btn btn-primary active">Create user and invite</button>
+    </div>
+  </div>
+<% end %>
