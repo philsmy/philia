@@ -9,6 +9,7 @@
     - [Universal models](#universal-models)
     - [Join tables](#join-tables)
   - [Installation](#installation)
+  - [Upgrading to Philia from Milia](#upgrading-to-philia-from-milia)
   - [Security / Caution](#security--caution)
   - [Contributing to philia](#contributing-to-philia)
   - [Why Philia](#why-philia)
@@ -50,7 +51,7 @@ Pure join tables (has_and_belongs_to_many HABTM associations) are neither Univer
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'philia'
+gem 'philia', github: 'philsmy/philia', branch: 'main'
 ```
 
 And then execute:
@@ -75,6 +76,16 @@ rails g philia:install
 rails db:drop db:create db:migrate
 
 ```
+
+## Upgrading to Philia from Milia
+As this is usually done as part of a Rails5 to Rails6 upgrade there's obviously a TON more you need to do.
+But for this specific gem I have found this to work:
+
+* search `Milia`, replace with `Philia` (I do this in all `*.rb` files)
+* search `milia`, replace with `philia` (I do this in all `*.rb` files)
+* rename `config/initializers/milia.rb` to `config/initializers/philia.rb`
+
+That should get you the bulk of the way there.
 
 ## Security / Caution
 * Philia designates a default_scope for all models (both universal and tenanted). Rails merges default_scopes if you use multiple default_scope declarations in your model, see [ActiveRecord Docs](http://api.rubyonrails.org/classes/ActiveRecord/Scoping/Default/ClassMethods.html#method-i-default_scope). However by unscoping via [unscoped](http://apidock.com/rails/ActiveRecord/Scoping/Default/ClassMethods/unscoped) you can accidentally remove tenant scoping from records. Therefore we strongly recommend to **NOT USE default_scope** at all.
