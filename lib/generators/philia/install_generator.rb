@@ -91,7 +91,7 @@ module Philia
 
           route snippet_routes_root_path
 
-          generate 'controller', 'home index'
+          generate 'controller', 'home index welcome'
           generate 'active_record:session_migration'
           generate 'model', 'tenant name:string:index'
           generate 'migration', 'CreateTenantsUsersJoinTable tenants users'
@@ -215,7 +215,7 @@ module Philia
       # *************************************************************
       def snippet_db_migrate_user
         <<-'RUBY1'
-    
+
       # philia member_invitable
       t.boolean    :skip_confirm_change_password, :default => false
       t.references :tenant
@@ -225,13 +225,15 @@ module Philia
       def snippet_routes_root_path
         <<-'RUBY2'
  root :to => "home#index"
+ get 'home/welcome', as: :welcome
+
         RUBY2
       end
 
       def snippet_app_ctlr_header
         <<-'RUBY3'
   before_action :authenticate_tenant!
-  
+
      ##    philia defines a default max_tenants, invalid_tenant exception handling
      ##    but you can override these if you wish to handle directly
   rescue_from ::Philia::Control::MaxTenantExceeded, :with => :max_tenants
@@ -249,17 +251,17 @@ module Philia
 
       def snippet_routes_devise
         <<-'RUBY5'
-  
+
   # *MUST* come *BEFORE* devise's definitions (below)
-  as :user do   
+  as :user do
     match '/user/confirmation' => 'philia/confirmations#update', :via => :put, :as => :update_user_confirmation
   end
 
-  devise_for :users, :controllers => { 
+  devise_for :users, :controllers => {
     :registrations => "philia/registrations",
     :confirmations => "philia/confirmations",
-    :sessions => "philia/sessions", 
-    :passwords => "philia/passwords", 
+    :sessions => "philia/sessions",
+    :passwords => "philia/passwords",
   }
 
         RUBY5
@@ -284,9 +286,9 @@ module Philia
 
       if new_signups_not_permitted?(coupon_params)
 
-        raise ::Philia::Control::MaxTenantExceeded, "Sorry, new accounts not permitted at this time" 
+        raise ::Philia::Control::MaxTenantExceeded, "Sorry, new accounts not permitted at this time"
 
-      else 
+      else
         tenant.save    # create the tenant
       end
       return tenant
@@ -348,7 +350,7 @@ module Philia
     end
 
     return new_member
-      
+
   end
 
         RUBY11
@@ -425,7 +427,7 @@ module Philia
 
       def snippet_env_prod
         <<-'RUBY21'
- 
+
   # devise says to define default url
   config.action_mailer.default_url_options = { :host => 'secure.simple-philia-app.com', :protocol => 'https' }
 
@@ -444,7 +446,7 @@ module Philia
 
       def snippet_env_test
         <<-'RUBY22'
- 
+
   # devise says to define default url
   config.action_mailer.default_url_options = { :host => "www.example.com" }
         RUBY22
@@ -452,7 +454,7 @@ module Philia
 
       def snippet_config_application
         <<-'RUBY23'
- 
+
     # uncomment to ensure a common layout for devise forms
     #   config.to_prepare do   # Devise
     #     Devise::SessionsController.layout "sign"
