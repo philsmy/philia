@@ -30,14 +30,14 @@ Philia ensures that users can only access data of their own tenant (organization
 
 
 ### Tenanted models
-Models which belong to a certain tenant (organization).  
-Add <i>acts_as_tenant</i> to the model body to activate tenanting for this model.    
+Models which belong to a certain tenant (organization).
+Add <i>acts_as_tenant</i> to the model body to activate tenanting for this model.
 Most of your tables (except for pure join tables, users, and tenants) should be tenanted.
 Every record of a tenanted table needs to have a `tenant_id` set. Philia takes care of this.
 
 ### Universal models
 Models which aren't specific to a tenant (organization) but have system wide relevance.
-Add <i>acts_as_universal</i> to the model body to mark them as universal models.  
+Add <i>acts_as_universal</i> to the model body to mark them as universal models.
 Universal tables <i>never</i> contain critical user/company information.
 The devise user table <i>must</i> be universal and should only contain email, encrypted password, and devise-required data.
 All other user data (name, phone, address, etc) should be broken out into a tenanted table called `members` (`Member belongs_to :user`, `User has_one :member`).
@@ -67,12 +67,11 @@ $ gem install philia
 Build Sample App (have Rails 6 as your default rails)
 ```
 rails new test-philia-app --database=mysql -T
-cd test-philia-app  
+cd test-philia-app
 bundle add devise
-rails webpacker:install
 echo "gem 'philia', path: '../philia'" >> Gemfile
 bundle
-rails g philia:install 
+rails g philia:install
 rails db:drop db:create db:migrate
 
 ```
@@ -101,7 +100,7 @@ That should get you the bulk of the way there.
    * philia will check for deviance
    * philia will raise exceptions if it's wrong and
    * philia will override it to maintain integrity.
-* **You use philia solely at your own risk!** 
+* **You use philia solely at your own risk!**
   * When working with multi-tenanted applications you handle lots of data of several organizations/companies which means a special responsibility for protecting the data as well. Do in-depth security tests prior to publishing your application.
 
 

@@ -62,7 +62,7 @@ module Philia
   mattr_accessor :trace_on
   @@trace_on = false
 
-  # Default way to setup philia. 
+  # Default way to setup philia.
   def self.setup
     yield self
   end
@@ -70,5 +70,4 @@ end
 
 require 'philia/base'
 require 'philia/control'
-require 'philia/active_record'
 require 'philia/invite_member'
