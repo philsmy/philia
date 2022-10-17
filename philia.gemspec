@@ -22,4 +22,6 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'devise', '~> 4.8.0', '>= 4.8.0'
   spec.add_dependency 'rails', '~> 6.1.3', '>= 6.1.3.2'
+
+  spec.required_ruby_version = '>= 3.0.0'
 end

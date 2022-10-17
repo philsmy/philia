@@ -8,5 +8,7 @@ group :development do
   gem 'sqlite3'
 end
 
+gem 'net-smtp'
+
 # To use a debugger
 # gem 'byebug', group: [:development, :test]
