@@ -1,7 +1,17 @@
-require 'philia/version'
-require 'philia/engine'
+begin
+  require 'rails/engine'
+  require 'philia/version'
+  require 'philia/engine'
+rescue LoadError
+end
 
 module Philia
+  extend ActiveSupport::Autoload
+
+  autoload :VERSION
+  autoload :Base
+  autoload :Control
+  autoload :InviteMember
 
   # expecting params[:coupon] for sign-ups
   mattr_accessor :use_coupon
@@ -32,12 +42,13 @@ module Philia
   @@whitelist_tenant_params = []
 
   def self.whitelist_tenant_params=(list)
-    raise ArgumentError unless !list.nil? && list.kind_of?( Array )
+    raise ArgumentError unless !list.nil? && list.is_a?(Array)
+
     @@whitelist_tenant_params = list
   end
 
-  def self.whitelist_tenant_params()
-    return @@whitelist_tenant_params << :name
+  def self.whitelist_tenant_params
+    @@whitelist_tenant_params << :name
   end
 
   # whitelist coupon params list
@@ -48,15 +59,14 @@ module Philia
   @@whitelist_coupon_params = []
 
   def self.whitelist_coupon_params=(list)
-    raise ArgumentError unless !list.nil? && list.kind_of?( Array )
+    raise ArgumentError unless !list.nil? && list.is_a?(Array)
+
     @@whitelist_coupon_params = list
   end
 
-  def self.whitelist_coupon_params()
-    return @@whitelist_coupon_params << :coupon
+  def self.whitelist_coupon_params
+    @@whitelist_coupon_params << :coupon
   end
-
-
 
   # undocumented feature, debugging trace, default is off
   mattr_accessor :trace_on
@@ -68,6 +78,6 @@ module Philia
   end
 end
 
-require 'philia/base'
-require 'philia/control'
-require 'philia/invite_member'
+ActiveSupport.on_load(:active_record) do
+  extend Philia::Base::ClassMethods
+end
