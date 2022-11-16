@@ -1,7 +1,14 @@
 begin
+<<<<<<< HEAD
   require "rails/engine"
   require "philia/version"
   require "philia/password"
+=======
+  require 'rails/engine'
+  require 'philia/version'
+  require 'philia/engine'
+  require 'philia/password'
+>>>>>>> ruby3password
 rescue LoadError
 end
 
