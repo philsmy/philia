@@ -121,7 +121,7 @@ module Philia
             next if ph_len > length - password.length
 
             # We've found a phoneme that meets our criteria
-            password << phoneme
+            password = "#{password.dup}#{phoneme}"
 
             # Handle ONE_CASE
             if feature_flags.include?(ONE_CASE) && ((first || ph_flags.include?(CONSONANT)) && rand(10) < 3)

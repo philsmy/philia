@@ -2,6 +2,7 @@ begin
   require 'rails/engine'
   require 'philia/version'
   require 'philia/engine'
+  require 'philia/password'
 rescue LoadError
 end
 
