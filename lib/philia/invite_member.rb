@@ -69,7 +69,7 @@ module Philia
       if password.blank?
         self.password =
           ::Philia::Password.generate(
-            8, Password::ONE_DIGIT | Password::ONE_CASE
+            8, ::Philia::Password::ONE_DIGIT | ::Philia::Password::ONE_CASE
           )
 
         self.password_confirmation = password
