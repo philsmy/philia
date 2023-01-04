@@ -41,7 +41,6 @@ module Philia
       # replaced it with the "run_bundle" method below
       # -------------------------------------------------------------
       def setup_initial_stuff
-        copy_file 'devise_permitted_parameters.rb', 'config/initializers/devise_permitted_parameters.rb'
         template 'initializer.rb', 'config/initializers/philia.rb'
 
         gem 'recaptcha', require: 'recaptcha/rails' unless options.skip_recaptcha
