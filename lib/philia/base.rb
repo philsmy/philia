@@ -28,7 +28,10 @@ module Philia
         # ..........................callback enforcers............................
         before_save do |obj| # force tenant_id to be correct for current_user
           # raise exception if updates attempted on wrong data
-          raise ::Philia::Control::InvalidTenantAccess unless obj.tenant_id == Thread.current[:tenant_id]
+          unless obj.tenant_id == Thread.current[:tenant_id]
+            p "obj.tenant_id: #{obj.tenant_id}; Thread.current[:tenant_id]: #{Thread.current[:tenant_id]}"
+            raise ::Philia::Control::InvalidTenantAccess 
+          end
         end
 
         # ..........................callback enforcers............................
