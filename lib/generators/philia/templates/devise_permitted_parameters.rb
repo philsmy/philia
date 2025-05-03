@@ -14,4 +14,4 @@ module DevisePermittedParameters
   end
 end
 
-DeviseController.include DevisePermittedParameters
+# DeviseController.include DevisePermittedParameters

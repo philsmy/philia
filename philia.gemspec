@@ -18,11 +18,12 @@ Gem::Specification.new do |spec|
   spec.metadata["source_code_uri"] = "https://github.com/philsmy/philia"
   spec.metadata["changelog_uri"] = "https://github.com/philsmy/philia/CHANGELOG.md"
 
-  spec.files = `git ls-files`.split($/)
+  spec.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
+  # spec.files = `git ls-files`.split($/)
   # spec.files = Dir['{app,config,db,lib}/**/*', 'MIT-LICENSE', 'Rakefile', 'README.md']
 
-  spec.add_runtime_dependency "devise", "~> 4.9.0"
-  spec.add_runtime_dependency "rails", ">= 6.0", "< 7.3"
+  spec.add_dependency "devise", "~> 4.9"
+  spec.add_dependency "rails", ">= 6.0", "< 7.3"
 
   spec.require_paths = ["lib"]
   spec.required_ruby_version = ">= 3.1"

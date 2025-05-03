@@ -1,84 +1,72 @@
-begin
-  require 'rails/engine'
-  require 'philia/version'
-  require 'philia/engine'
-  require 'philia/password'
-rescue LoadError
-end
+# philia/lib/philia.rb
+
+require "devise"
+require "philia/engine" if defined?(Rails)
 
 module Philia
-  extend ActiveSupport::Autoload
+  # Explicitly require Philia components instead of using autoload to avoid conflicts
+  require "philia/version"
+  require "philia/base"
+  require "philia/control"
+  require "philia/invite_member"
 
-  autoload :VERSION
-  autoload :Base
-  autoload :Control
-  autoload :InviteMember
-
-  # expecting params[:coupon] for sign-ups
+  # Configuration settings with default values
   mattr_accessor :use_coupon
-  @@use_coupon = true
+  self.use_coupon = true
 
-  # use recaptcha to validate human params input
   mattr_accessor :use_recaptcha
-  @@use_recaptcha = false
+  self.use_recaptcha = false
 
-  # use sign_out to root; else return to sign-in page
   mattr_accessor :signout_to_root
-  @@signout_to_root = true
+  self.signout_to_root = true
 
-  # use airbrake gem to log exceptions
   mattr_accessor :use_airbrake
-  @@use_airbrake = false
+  self.use_airbrake = false
 
-  # use invite_member for devise work-around to invite members
-  # ASSUMES User model
   mattr_accessor :use_invite_member
-  @@use_invite_member = true
+  self.use_invite_member = true
 
-  # whitelist tenant params list
-  # allows an app to expand the permitted attribute list
-  # specify each attribute as a symbol
-  # example: [:name]
-  # config.whitelist_tenant_params = []
+  mattr_accessor :trace_on
+  self.trace_on = false
+
+  # Whitelist tenant parameters, allowing expansion by the application
   @@whitelist_tenant_params = []
 
   def self.whitelist_tenant_params=(list)
-    raise ArgumentError unless !list.nil? && list.is_a?(Array)
+    raise ArgumentError, "Expected an array of symbols" unless list.is_a?(Array)
 
     @@whitelist_tenant_params = list
   end
 
   def self.whitelist_tenant_params
-    @@whitelist_tenant_params << :name
+    @@whitelist_tenant_params + [:name]
   end
 
-  # whitelist coupon params list
-  # allows an app to expand the permitted attribute list
-  # specify each attribute as a symbol
-  # example: [:name]
-  # config.whitelist_coupon_params = []
+  # Whitelist coupon parameters, allowing expansion by the application
   @@whitelist_coupon_params = []
 
   def self.whitelist_coupon_params=(list)
-    raise ArgumentError unless !list.nil? && list.is_a?(Array)
+    raise ArgumentError, "Expected an array of symbols" unless list.is_a?(Array)
 
     @@whitelist_coupon_params = list
   end
 
   def self.whitelist_coupon_params
-    @@whitelist_coupon_params << :coupon
+    @@whitelist_coupon_params + [:coupon]
   end
 
-  # undocumented feature, debugging trace, default is off
-  mattr_accessor :trace_on
-  @@trace_on = false
-
-  # Default way to setup philia.
+  # Method for setting up Philia with a block
   def self.setup
     yield self
   end
 end
 
+# Extend ActiveRecord with Philia::Base::ClassMethods if the module exists
 ActiveSupport.on_load(:active_record) do
-  extend Philia::Base::ClassMethods
+  extend Philia::Base::ClassMethods if defined?(Philia::Base::ClassMethods)
+end
+
+# Extend ActionController with Philia::Control if the module exists
+ActiveSupport.on_load(:action_controller_base) do
+  include Philia::Control if defined?(Philia::Control)
 end
